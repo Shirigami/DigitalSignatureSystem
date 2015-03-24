@@ -1,0 +1,19 @@
+
+Motivación:
+
+Con  la  aprobación  de  la  Ley  de  Certificados,  Firmas  Digitales  y  Documentos  Electrónicos  (8454)  en  
+el  2005  se  regula  en  Costa  Rica  todo  lo  relacionado  con  la  firma  de  documentos  digitales.  “La  firma  
+digital  es  un  método  que  asocia  la  identidad  de  una  persona  o  equipo,  con  un  mensaje  o  
+documento  electrónico,  para  asegurar  la  autoría  y  la  integridad  del  mismo.  La  firma  digital  del  
+documento  es  el  resultado  de  aplicar  algoritmos  matemáticos,  (denominados  hash),  a  su  contenido  
+y,  generando  una  firma  digital  del  documento.” 
+  
+Con  el  avance  de  los  sistemas  de  información  en  un  mundo  globalizado,  es  de  suma  importancia  
+poder  contar  con  herramientas  tecnológicas  para  autenticar  la  identidad  de  una  persona  en  la  
+Internet.  Con  el  desarrollo  de  una  infraestructura  de  firma  digital  en  el  país,  se  habilita  la  posibilidad  
+a  personas  de  obtener  una  firma  digital,  y  así  poder  autenticarse  en  la  web  y  firmar  legalmente  
+documentos  electrónicos.  
+
+El  propósito  de  esta  tarea  programada  es  desarrollar  en  el  lenguaje  de  programación  C,  un  sistema  
+simplificado  que  permita  demostrar  el  funcionamiento  de  una  infraestructura  de  firma  digital.  
+
