@@ -1,6 +1,7 @@
 #include "Hash.h"
 #include "RSAencription.h"
 
+
 int main(int argc, char const *argv[])
 {
 	char nomArchivo[] = "hola";
