@@ -1,5 +1,5 @@
 TARGET = DigitalSignatureSystem
-LIBS = -lm -lcrypto
+LIBS = -lm -lcrypto -lgcrypt -lgpg-error
 CC = gcc
 CFLAGS = -g -Wall -std=c11
 
@@ -21,3 +21,4 @@ $(TARGET): $(OBJECTS)
 clean:
 		-rm -f *.o
 		-rm -f $(TARGET)
+#-lstdc++
