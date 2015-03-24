@@ -4,9 +4,10 @@
 /* OpenSSL headers */
 
 #include <openssl/ssl.h>
-// #include "openssl/ssl.h"
-// #include "openssl/err.h"
+#include "openssl/ssl.h"
+#include "openssl/err.h"
 
-/* Initializing OpenSSL */
+void RSA_keys(int bits, char **priKey, char **pubKey);
+
 
 #endif

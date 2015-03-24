@@ -1,8 +1,7 @@
 TARGET = DigitalSignatureSystem
-LIBS = -lm -lstdc++ -lgcrypt -lgpg-error 
+LIBS = -lm -lcrypto -lgcrypt -lgpg-error
 CC = gcc
-CFLAGS = -g -Wall -std=c11 -I /usr/local/ssl/include/ 
-
+CFLAGS = -g -Wall -std=c11
 
 .PHONY: default all clean
 
@@ -22,3 +21,4 @@ $(TARGET): $(OBJECTS)
 clean:
 		-rm -f *.o
 		-rm -f $(TARGET)
+#-lstdc++
