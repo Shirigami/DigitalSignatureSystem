@@ -1,16 +1,29 @@
-/* OpenSSL headers */
+#include <stdio.h>
+#include <openssl/rsa.h>
+#include <openssl/pem.h>
 
-#include <openssl/ssl.h>
-// #include "openssl/ssl.h"
-// #include "openssl/err.h"
+int main(int argc, char const *argv[]) {
+  const int kBits = 2048;
+  const int kExp = 3;
 
-/* Initializing OpenSSL */
+  int keylen;
+  char *pem_key;
 
-//SSL_load_error_strings();
-//ERR_load_BIO_strings();
-//OpenSSL_add_all_algorithms();
+  RSA *rsa = RSA_generate_key(kBits, kExp, 0, 0);
 
-int main(){
-  puts("Hola Mundo");
+  /* To get the C-string PEM form: */
+  BIO *bio = BIO_new(BIO_s_mem());
+  PEM_write_bio_RSAPrivateKey(bio, rsa, NULL, NULL, 0, NULL, NULL);
+
+  keylen = BIO_pending(bio);
+  pem_key = calloc(keylen+1, 1); /* Null-terminate */
+  BIO_read(bio, pem_key, keylen);
+
+  printf("%s", pem_key);
+
+  BIO_free_all(bio);
+  RSA_free(rsa);
+  free(pem_key); //
+
   return 0;
 }

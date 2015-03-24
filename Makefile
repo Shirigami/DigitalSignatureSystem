@@ -1,7 +1,7 @@
 TARGET = DigitalSignatureSystem
-LIBS = -lm
+LIBS = -lm -lcrypto
 CC = gcc
-CFLAGS = -g -Wall -std=c11 -I /usr/local/ssl/include/
+CFLAGS = -g -Wall -std=c11
 
 .PHONY: default all clean
 
