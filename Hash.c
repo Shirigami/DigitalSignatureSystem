@@ -37,12 +37,12 @@ int summary(char *string){
 
 int readCh(char nameFile[]) {
 	FILE *file = NULL; /* puntero donde se guardara la direccion del archivo*/
-	char ch; /* almacenara los caracteres que contiene el archivo*/
+	
 	int count = 0;
 
 	file = fopen (nameFile, "r"); /* abre y  lee el archivo*/
 	while (feof(file) == 0){ /* Mientras el archivo no llegue al final*/
-		ch = fgetc(file); /* Extrae del archivo caracter por caracter*/
+		fgetc(file); /* Extrae del archivo caracter por caracter*/
 		count++; /* Contador de caracteres */
 	}
   	fclose(file);/*cierra el archivo*/
@@ -51,7 +51,7 @@ int readCh(char nameFile[]) {
 }
 
 
-/*Funcion readiFile recibe como parametro size que se utilizará para hacer una lista dinámica, 
+/*Funcion readiFile recibe como parametro size que se utilizará para hacer una lista dinámica,
 y el nombre del archivo que se leera para guardarlo dentro de la lista dinámica*/
 char *readFile(int size , char nameFile[]){
 
@@ -62,13 +62,13 @@ char *readFile(int size , char nameFile[]){
 	int count = 0; /* contador para almacenar los caracteres en la lista*/
 
 	file = fopen(nameFile, "r"); /*abre y lee el archivo*/
-	
+
 	while (feof(file)==0){/*Mientras el archivo no llegue al final*/
 		ch = fgetc(file); /*lee caracter por caracter*/
 		content[count] = ch; /*almacena le caracter en la lista*/
 		count++; /*aumenta el contador*/
 	}
 
-	fclose(file); /*cierra el archivo*/	
+	fclose(file); /*cierra el archivo*/
 	return content; /* retorna la lista*/
 }
