@@ -7,7 +7,7 @@
 #include "openssl/ssl.h"
 #include "openssl/err.h"
 
-char *llavePrivada(int tamano);
+void RSA_keys(int bits, char **priKey, char **pubKey);
 
 
 #endif

@@ -4,11 +4,18 @@
 
 int main(int argc, char const *argv[])
 {
-	char nomArchivo[] = "hola";
-	int cantidad = readCh(nomArchivo);
-	char *ptrArchivo = readFile(cantidad,nomArchivo);
-	summary(ptrArchivo);
-	free(ptrArchivo);
+
+	char *publicKey, *privateKey;
+	RSA_keys(1024, &publicKey, &privateKey);
+	printf("%s",publicKey);
+	printf("%s",privateKey);
+	free(publicKey);
+	free(privateKey);
+	// char nomArchivo[] = "hola";
+	// int cantidad = readCh(nomArchivo);
+	// char *ptrArchivo = readFile(cantidad,nomArchivo);
+	// summary(ptrArchivo);
+	// free(ptrArchivo);
 
 	return 0;
 }
