@@ -2,7 +2,6 @@
 
 int summary(char *string){
 
-
 	/* Extención del mensaje a la que se aplicara la funcion hash */
 	int msg_len = strlen( string );
 
@@ -34,15 +33,16 @@ int summary(char *string){
 	return 0;
 }
 
-
+/*Funcion readCh retorna la cantidad de caracteres que contiene el documento, la cantidad será
+utilizada para la creacion de la lista dinámica*/
 int readCh(char nameFile[]) {
 	FILE *file = NULL; /* puntero donde se guardara la direccion del archivo*/
-	char ch; /* almacenara los caracteres que contiene el archivo*/
 	int count = 0;
 
 	file = fopen (nameFile, "r"); /* abre y  lee el archivo*/
+
 	while (feof(file) == 0){ /* Mientras el archivo no llegue al final*/
-		ch = fgetc(file); /* Extrae del archivo caracter por caracter*/
+		fgetc(file); /* Recorre todo el documento*/
 		count++; /* Contador de caracteres */
 	}
   	fclose(file);/*cierra el archivo*/
@@ -51,8 +51,8 @@ int readCh(char nameFile[]) {
 }
 
 
-/*Funcion readiFile recibe como parametro size que se utilizará para hacer una lista dinámica, 
-y el nombre del archivo que se leera para guardarlo dentro de la lista dinámica*/
+/*Funcion readiFile recibe como parametro size que se utilizará para hacer una lista dinámica,
+y el nombre del archivo que se leera para guardarlo dentro de la lista*/
 char *readFile(int size , char nameFile[]){
 
 	char *content; /*puntero que apunta a la lista dinámica*/
@@ -62,13 +62,23 @@ char *readFile(int size , char nameFile[]){
 	int count = 0; /* contador para almacenar los caracteres en la lista*/
 
 	file = fopen(nameFile, "r"); /*abre y lee el archivo*/
-	
+
 	while (feof(file)==0){/*Mientras el archivo no llegue al final*/
 		ch = fgetc(file); /*lee caracter por caracter*/
 		content[count] = ch; /*almacena le caracter en la lista*/
 		count++; /*aumenta el contador*/
 	}
 
-	fclose(file); /*cierra el archivo*/	
+	fclose(file); /*cierra el archivo*/
 	return content; /* retorna la lista*/
+}
+
+
+int compareHash(char hash1[], char hash2[]){
+	char *h1 = hash1;
+	char *h2 = hash2;
+	int ret = 0;
+	ret = strncmp(h1, h2, 6);
+	if(ret != 0){ret = 1;}
+	return ret;
 }
