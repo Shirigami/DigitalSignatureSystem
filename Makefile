@@ -1,7 +1,8 @@
 TARGET = DigitalSignatureSystem
-LIBS = -lm
+LIBS = -lm -lstdc++ -lgcrypt -lgpg-error 
 CC = gcc
-CFLAGS = -g -Wall -std=c11 -I /usr/local/ssl/include/
+CFLAGS = -g -Wall -std=c11 -I /usr/local/ssl/include/ 
+
 
 .PHONY: default all clean
 
