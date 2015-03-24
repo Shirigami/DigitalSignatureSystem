@@ -21,11 +21,13 @@ int main(int argc, char const *argv[])
 	free(keyPair);
 	free(publicKey);
 	free(privateKey);
+
 	// char nomArchivo[] = "hola";
 	// int cantidad = readCh(nomArchivo);
 	// char *ptrArchivo = readFile(cantidad,nomArchivo);
 	// summary(ptrArchivo);
 	// free(ptrArchivo);
 
+	//printf("%d\n",compareHash("95i","95"));
 	return 0;
 }
