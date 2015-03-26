@@ -1,9 +1,8 @@
 #include "Hash.h"
 #include "RSAencription.h"
-//
+
 int main(int argc, char const *argv[])
 {
-
 	char *publicKey, *privateKey;
 	RSA *keyPair;
 	char *var;
@@ -21,10 +20,11 @@ int main(int argc, char const *argv[])
 	free(keyPair);
 	free(publicKey);
 	free(privateKey);
+
 	char nomArchivo[] = "DocumentoDePrueba";
 	int cantidad = readCh(nomArchivo);
 	char *ptrArchivo = readFile(cantidad,nomArchivo);
-	summary(ptrArchivo);
+	printf("%s\n",summary(ptrArchivo));
 	free(ptrArchivo);
 	return 0;
 }

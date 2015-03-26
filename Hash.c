@@ -1,6 +1,6 @@
 #include "Hash.h"
 
-int summary(char *string){
+char *summary(char string[]){
 
 	/* Extención del mensaje a la que se aplicara la funcion hash */
 	int msg_len = strlen( string );
@@ -28,9 +28,7 @@ int summary(char *string){
 		snprintf ( p, 3, "%02x", hash[i] );
 	}
 
-	printf( "%s\n", out );
-	free( out );
-	return 0;
+	return out;
 }
 
 /*Funcion readCh retorna la cantidad de caracteres que contiene el documento, la cantidad será
