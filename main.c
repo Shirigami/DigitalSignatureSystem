@@ -12,13 +12,13 @@ int main(int argc, char const *argv[])
 	printf("%s",privateKey);
 	free(publicKey);
 	free(privateKey);
-
-	char nomArchivo[] = "hola";
+*/
+	char nomArchivo[] = "DocumentoDePrueba";
 	int cantidad = readCh(nomArchivo);
 	char *ptrArchivo = readFile(cantidad,nomArchivo);
 	summary(ptrArchivo);
 	free(ptrArchivo);
-	*/
+
 	//printf("%d\n",compareHash("95i","95"));
-	return 0;
+	//return 0;
 }
