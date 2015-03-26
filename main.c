@@ -35,23 +35,17 @@ int main(int argc, char const *argv[])
 	printf("mensajeDesencriptado\n");
 	printf("%s\n",msgDecrypted);
 
-
-
-
-
 	free(msgEncryp);
 	free(msgDecrypted);
 	free(keyPair);
 	free(publicKey);
 	free(privateKey);
 
-<<<<<<< HEAD
-=======
-	char nomArchivo[] = "profe";
-	int cantidad = readCh(nomArchivo);
-	char *ptrArchivo = readFile(cantidad,nomArchivo);
-	printf("%s\n",summary(ptrArchivo));
-	free(ptrArchivo);
->>>>>>> 4bc325403d13fd9240eb21703373536adb7f932d
+	// char nomArchivo[] = "profe";
+	// int cantidad = readCh(nomArchivo);
+	// char *ptrArchivo = readFile(cantidad,nomArchivo);
+	// printf("%s\n",summary(ptrArchivo));
+	// free(ptrArchivo);
+
 	return 0;
 }
