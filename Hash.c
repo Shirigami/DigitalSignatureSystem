@@ -35,20 +35,15 @@ char *summary(char string[]){
 utilizada para la creacion de la lista dinámica*/
 int readCh(char nameFile[]) {
 	FILE *file = NULL; /* puntero donde se guardara la direccion del archivo*/
-
 	int count = 0;
-
 	file = fopen (nameFile, "r"); /* abre y  lee el archivo*/
 
 	while (feof(file) == 0){ /* Mientras el archivo no llegue al final*/
-
 		fgetc(file); /* Recorre todo el documento*/
-
 		count++; /* Contador de caracteres */
 	}
   	fclose(file);/*cierra el archivo*/
 	return count; /* retorna la cantidad de caracteres que contiene el archivo*/
-
 }
 
 
