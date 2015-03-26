@@ -27,12 +27,52 @@ void RSA_keys(int bits, char **priKey, char **pubKey, RSA **keyPair){
 
 }
 
-char *RSA_encrypt(char msg[],RSA *keypair){
+RSA *createRSA(unsigned char *key,int public){
+  RSA *rsa = NULL;
+  BIO *keybio;
+  keybio = BIO_new_mem_buf(key,-1);
+  printf("entre");
+  if(keybio == NULL){
+    printf("Failed to create keyBIO");
+  }
+  if(public){
+    rsa = PEM_read_bio_RSA_PUBKEY(keybio,&rsa,NULL,NULL);
 
-  // Encrypt the message
-  char *encrypt = malloc(RSA_size(keypair));
-  RSA_public_encrypt(strlen(msg)+1,(unsigned char*) msg,
-          (unsigned char*) encrypt, keypair, RSA_PKCS1_OAEP_PADDING);
+  }
+  else{
+    rsa = PEM_read_bio_RSAPrivateKey(keybio,&rsa,NULL,NULL);
 
-  return encrypt;
+  }
+  return rsa;
+}
+
+int public_encrypt(unsigned char *dato, int dato_len,
+          unsigned char *publicKey, unsigned char *encrypted,RSA *rsa){
+
+  int padding = RSA_PKCS1_PADDING;
+
+  int result = RSA_public_encrypt(dato_len,dato,encrypted,rsa,padding);
+
+  return result;
+}
+
+int private_decrypt(unsigned char *enc_dato, int data_len,
+    unsigned char *privateKey, unsigned char *decrypted,RSA *rsa){
+
+  int padding = RSA_PKCS1_PADDING;
+
+  int result = RSA_private_decrypt(data_len,enc_dato,decrypted,rsa,padding);
+
+  return result;
+}
+
+char *RSA_decrypt(char *encrypt,RSA *keypair,int *encrypt_len){
+
+  char *decrypt = malloc(RSA_size(keypair));
+  RSA_private_decrypt(*encrypt_len, (unsigned char*)encrypt, (unsigned char*)decrypt,
+                       keypair, RSA_PKCS1_OAEP_PADDING);
+   printf("Decrypted message: %s\n", decrypt);
+   
+   return decrypt;
+
 }
