@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
 	free(publicKey);
 	free(privateKey);
 
-	char nomArchivo[] = "DocumentoDePrueba";
+	char nomArchivo[] = "profe";
 	int cantidad = readCh(nomArchivo);
 	char *ptrArchivo = readFile(cantidad,nomArchivo);
 	printf("%s\n",summary(ptrArchivo));
