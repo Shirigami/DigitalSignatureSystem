@@ -1,10 +1,12 @@
 #include "Hash.h"
 #include "RSAencription.h"
-//
+
 int main(int argc, char const *argv[])
 {
 
+
 	char *privateKey, *publicKey;
+
 	RSA *keyPair;
 
 	char *msgEncryp = (char*)malloc(2048);
@@ -43,5 +45,13 @@ int main(int argc, char const *argv[])
 	free(publicKey);
 	free(privateKey);
 
+<<<<<<< HEAD
+=======
+	char nomArchivo[] = "profe";
+	int cantidad = readCh(nomArchivo);
+	char *ptrArchivo = readFile(cantidad,nomArchivo);
+	printf("%s\n",summary(ptrArchivo));
+	free(ptrArchivo);
+>>>>>>> 4bc325403d13fd9240eb21703373536adb7f932d
 	return 0;
 }

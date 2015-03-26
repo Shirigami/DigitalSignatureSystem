@@ -6,7 +6,7 @@
 #include <string.h>
 #include <gcrypt.h>
 
-int summary(char *string);
+char *summary(char string[]);
 
 int readCh(char nameFile[]);
 
