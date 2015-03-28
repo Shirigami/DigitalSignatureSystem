@@ -1,6 +1,11 @@
 #include "userData.h"
+#include "Almacenar.h"
+#include "RSAencription.h"
 
-int pin_size(long num){
+
+
+int pin_size(int num){
+  printf("%d",num);
   int size = 0;
   while (num !=0 ){
     num = num/10;
@@ -16,29 +21,31 @@ int request_info_user(){
   printf("Ingrese los datos que se le solicitan\n\n");
 
   /*Solicitud del nombre del usuario*/
-  char first_name[20];
+  char *first_name;
   printf("Nombre: ");
-  scanf ("%s",first_name);
-
+  scanf ("%s",&first_name);
 
   /*Solicitud del apellido del usuario*/
-  char last_name[20];
+  char *last_name;
   printf("Apellido: ");
-  scanf ("%s",last_name);
+  scanf ("%s",&last_name);
 
 
   /*Solicitud del numero de identificacion del usuario*/
-  int id_user;
+  char *id_user;
   printf("Numero de identificación: ");
-  scanf ("%d",&id_user);
+  scanf ("%s",&id_user);
+
 
   /*Solicitud del pin del usuario*/
-  int pin;
-  printf("PIN: ");
-  scanf("%d",&pin);
-  while (pin_size(pin) != 5){ /*Verificacion  del largo del pin*/
+  char *pin;
+  printf("PIN:\n");
+  scanf("%s",&pin);
+  //aprintf("%s",pin);
+
+  while (strlen(&pin) != 5){ /*Verificacion  del largo del pin*/
     printf("El pin debe ser de 5 dígitos, por favor ingreselo nuevamente: \n");
-    scanf("%d",&pin);
+    scanf("%s",&pin);
   }
 
   /*Solicitud del tamaño de las llaves públicas y privadas*/
@@ -47,19 +54,55 @@ int request_info_user(){
   printf ("         1- 1024\n");
   printf ("         2- 2048\n");
   scanf ("%d",&select_key_size);
-
+  //printf("estoyaqui");
+  //printf("%d",select_key_size);
   while (select_key_size != 1 && select_key_size != 2){/*Verificacion de la opcion seleccionada*/
       printf("Opcion inválida \n");
       printf("Seleccione nuevamente el tamaño de la llave\n");
       scanf("%d",&select_key_size);
+      getchar();
   }
-
   switch(select_key_size){
-		case 1:  /*En caso de que elija la opcion 1*/
-      printf("Aun no hace nada\n");
-		case 2: /*En caso de que elija la opcion 1*/
-      printf("Aun no hace nada\n");
+    case 1: /*En caso de que elija la opcion 1*/
+      select_key_size = 1024;
+      break;
+    case 2: /*En caso de que elija la opcion 1*/
+      select_key_size = 2048;
+      break;
+
   }
+  //printf("%d",select_key_size);
+
+  char *privateKey, *publicKey;
+  RSA_keys(select_key_size, &publicKey, &privateKey);
+  // printf("%s\n",&id_user);
+  // printf("%s\n",&first_name);
+  // printf("%s\n",&pin);
+  // printf("%d\n",select_key_size);
+  //printf("%c\n",select_key_size - 'a');
+  // printf("%s\n",publicKey);
+  // printf("%s\n",privateKey);
+	char size[5];
+	sprintf(size,"%d",select_key_size);
+
+  // temporal = select_key_size - 'a';
+  //printf("%s",temporal);
+  Usuario cliente;
+  cliente.id = id_user;
+  cliente.nombre = first_name;
+  cliente.pin = pin;
+  cliente.largo = size;
+  cliente.pkey = publicKey;
+  cliente.prkey = privateKey;
+  // printf("%s",&cliente.id);
+  // printf("%s",&cliente.nombre);
+  // printf("%s",&cliente.pin);
+  //printf("%s",cliente.largo);
+  // printf("%s",cliente.pkey);
+  // printf("%s",cliente.prkey);
+
+
+  AlmacenarDatos(cliente);
   return 0;
 }
 

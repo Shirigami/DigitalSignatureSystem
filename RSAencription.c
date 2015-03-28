@@ -3,21 +3,20 @@
 /* Generacion de las llaves publica y privada
 Los bits puede ser 1024 o 2048 segun que tan segura quiere la llave
 Para obtener las llaves char *privateKey, *publicKey; y enviar la referencia &
-Para obtener la llave par 	RSA *keyPair; y enviar la referencia &
 */
 
-void RSA_keys(int bits, char **priKey, char **pubKey, RSA **keyPair){
+void RSA_keys(int bits, char **priKey, char **pubKey){
 
   const int numExp = 3; // Exponente
-
-  *keyPair = RSA_generate_key(bits, numExp, NULL, NULL); // Creacion de la llave par
+  char *keyPair;
+  keyPair = RSA_generate_key(bits, numExp, NULL, NULL); // Creacion de la llave par
 
   BIO *private = BIO_new(BIO_s_mem());
   BIO *public = BIO_new(BIO_s_mem());
 
   //Generacion de las llaves publicas y privadas segun la llave par
-  PEM_write_bio_RSAPrivateKey(private, *keyPair, NULL, NULL, 0, NULL, NULL);
-  PEM_write_bio_RSAPublicKey(public, *keyPair);
+  PEM_write_bio_RSAPrivateKey(private, keyPair, NULL, NULL, 0, NULL, NULL);
+  PEM_write_bio_RSAPublicKey(public, keyPair);
 
   // Tamano de las llaves
   size_t privateLeng = BIO_pending(private);

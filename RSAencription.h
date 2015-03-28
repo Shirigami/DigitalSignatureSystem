@@ -13,7 +13,7 @@
 #include <string.h>
 
 // Generacion de llaves
-void RSA_keys(int bits, char **priKey, char **pubKey, RSA **keypair);
+void RSA_keys(int bits, char **priKey, char **pubKey);
 
 // Encriptando con public key
 int public_encrypt(unsigned char *dato, int dato_len,

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int pin_size(long num);
+int pin_size(int num);
 int request_info_user();
 int revoked_certificate();
 int signing_document();
