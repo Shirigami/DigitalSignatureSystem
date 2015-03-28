@@ -94,15 +94,17 @@ int revoked_certificate(){
   printf("Numero de identificación: ");
   scanf ("%s",&id_user);
   strcat(id_user,".txt");
-  printf("%s",id_user);
+  //printf("%s",id_user);
   FILE* archivo = fopen(id_user, "r");
   if (archivo) {
     fclose(archivo);
-
-    //RevocarCertificado(id_user,);
+    char *privateKey, *publicKey;
+    //int bits;
+    RSA_keys(1024,&publicKey,&privateKey);
+    RevocarCertificado(id_user,privateKey,publicKey);
   }
   else {
-      printf("\nEl archivo no existe\n");
+      printf("\nEl usuario no existe\n");
       return 0;
   }
 return 0;

@@ -14,6 +14,7 @@
 // }
 
 
+
 void AlmacenarDatos(Usuario user){// crea el txt cn la informacion del usuario
 	// printf("%s\n",user.id);
   // printf("%s\n",user.nombre);
@@ -90,7 +91,7 @@ void RevocarCertificado(char *doc, char *puk, char*prk){// introduce las nuevas 
 
 	f = fopen(doc,"r");
 	d = fopen(pivot,"w");
-	int c=0;
+	int c = 0;
 
 
 
