@@ -19,6 +19,10 @@ void FirmarDoc(char *doc, char *firma, char *id);
 char *GetPin(char *doc);
 char *GetPublic(char *name);
 char *GetPrivate(char *name);
+char *GetIDC(char *nom);
+char *GetIDU(char *nombre);
+int ComprobarCertificado(char *Texto);
+
 
 
 #endif

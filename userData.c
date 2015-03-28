@@ -21,24 +21,18 @@ int request_info_user(){
   printf("Ingrese los datos que se le solicitan\n\n");
 
   /*Solicitud del nombre del usuario*/
-  char *first_name;
+  char first_name[200];
   printf("Nombre: ");
   scanf ("%s",&first_name);
 
-  /*Solicitud del apellido del usuario*/
-  char *last_name;
-  printf("Apellido: ");
-  scanf ("%s",&last_name);
-
-
   /*Solicitud del numero de identificacion del usuario*/
-  char *id_user;
+  char id_user[20];
   printf("Numero de identificación: ");
   scanf ("%s",&id_user);
 
 
   /*Solicitud del pin del usuario*/
-  char *pin;
+  char pin[20];
   printf("PIN:\n");
   scanf("%s",&pin);
   //aprintf("%s",pin);
@@ -71,22 +65,13 @@ int request_info_user(){
       break;
 
   }
-  //printf("%d",select_key_size);
 
   char *privateKey, *publicKey;
-  RSA_keys(select_key_size, &publicKey, &privateKey);
-  // printf("%s\n",&id_user);
-  // printf("%s\n",&first_name);
-  // printf("%s\n",&pin);
-  // printf("%d\n",select_key_size);
-  //printf("%c\n",select_key_size - 'a');
-  // printf("%s\n",publicKey);
-  // printf("%s\n",privateKey);
+  RSA_keys(select_key_size, &privateKey, &publicKey);
 	char size[5];
+
 	sprintf(size,"%d",select_key_size);
 
-  // temporal = select_key_size - 'a';
-  //printf("%s",temporal);
   Usuario cliente;
   cliente.id = id_user;
   cliente.nombre = first_name;
@@ -94,12 +79,6 @@ int request_info_user(){
   cliente.largo = size;
   cliente.pkey = publicKey;
   cliente.prkey = privateKey;
-  // printf("%s",&cliente.id);
-  // printf("%s",&cliente.nombre);
-  // printf("%s",&cliente.pin);
-  //printf("%s",cliente.largo);
-  // printf("%s",cliente.pkey);
-  // printf("%s",cliente.prkey);
 
 
   AlmacenarDatos(cliente);
@@ -111,10 +90,22 @@ int revoked_certificate(){
   printf("______________________________________________________________________ \n");
   printf("Para revocar el certificado ingrese su número de identificación.\n\n");
   /*Solicitud del numero de identificacion*/
-  int id_user;
+  char id_user[200];
   printf("Numero de identificación: ");
-  scanf ("%d",&id_user);
-  return 0;
+  scanf ("%s",&id_user);
+  strcat(id_user,".txt");
+  printf("%s",id_user);
+  FILE* archivo = fopen(id_user, "r");
+  if (archivo) {
+    fclose(archivo);
+
+    //RevocarCertificado(id_user,);
+  }
+  else {
+      printf("\nEl archivo no existe\n");
+      return 0;
+  }
+return 0;
 }
 
 

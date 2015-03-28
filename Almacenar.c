@@ -15,28 +15,33 @@
 
 
 void AlmacenarDatos(Usuario user){// crea el txt cn la informacion del usuario
-	printf("%s\n",&user.id);
-  printf("%s\n",&user.nombre);
-  printf("%s\n",&user.pin);
-  printf("%s\n",user.largo);
-  printf("%s\n",user.pkey);
-  printf("%s\n",user.prkey);
-
+	// printf("%s\n",user.id);
+  // printf("%s\n",user.nombre);
+  // printf("%s\n",user.pin);
+  // printf("%s\n",user.largo);
+  // printf("%s\n",user.pkey);
+  // printf("%s\n",user.prkey);
 
 	FILE *f;
-	char txt[] = ".txt";
-	char *temp = strcat(&user.id,txt);
+	int e = strlen(user.id) + 4;
+	char temp[e];
+	strcpy(temp,user.id);
+	strcat(temp,".txt");
+
+
 
 	f=fopen(temp,"w+");
  	fputs("-ID Usuario:",f);
-	fputs(&user.id,f);
+	fputs(user.id,f);
 	fputs("\n-Nombre:",f);
-	fputs(&user.nombre,f);
-	fputs("\n*Pin:",f);// alt+251
-	fputs(&user.pin,f);
+	fputs(user.nombre,f);
+	fputs("\n",f);
+	fputs("*Pin:",f);// alt+251
+	fputs(user.pin,f);
 	fputs("\n-Largo de llave:\n",f);
 	fputs(user.largo,f);
-	fputs("\n @ID_certificado: 1\n",f);
+	fputs("\n",f);
+	fputs("\n@ID_certificado: 1\n",f);
 	fputs("$Public Key\n",f);
 	fputs(user.pkey,f);
 	fputs("\n*Private Key\n",f);
@@ -141,60 +146,74 @@ void FirmarDoc(char *doc, char *firma, char *id){//crea el doc firmado
 
 }
 
+
+
 char *GetPin(char *doc){// obtiene el pin del usuario
 	FILE *f;
 	char *pin;
-	int cont=0, i=0, c=0;
+	int cont=0, i=0, c=0, cont2=0;
 	f=fopen(doc,"r");
 	while ((c = getc(f)) != EOF){
-		if(cont>4 && c=='\n'){
+		if(cont>5 && c=='\n'){
 			break;
-		}
-		if(c=='*'){
-			i=1;
 		}
 		if(i==1){
 			cont++;
 		}
-		if(cont>=4){
+		if(c=='*'){
+			i=1;
+		}
+
+		if(cont>=5){
+			//putchar(c);
 			*pin=c;
-			*pin++;
+			pin++;
+			cont2++;
 
 		}
 
 	}// cierre while
 	*pin='\0';
-	printf("%s\n",pin );
+	pin=pin-(cont2);
+	//printf("%s\n",pin);
 	return pin;
 
 }
 
 char *GetPublic(char *name){// obtiene la llave publica del documento firmado
 	FILE *f;
-	char *pk;
-	int lock=0, i=0, c=0, lock2=0;
+	char *puntero=(char *) malloc(2048);
+	int lock=0, i=0, c=0, lock2=0, cont=0, cont2=0;
 	f=fopen(name,"r");
 	while ((c = getc(f)) != EOF){
+
+		if(lock==1){
+			cont++;
+			//putchar('W');
+		}
 		if(c=='$'){
 			lock=1;
+
 		}
 
-		if(lock==1 && lock2==1){
-			*pk=c;
-			*pk++;
+		if(cont>=11){
+			*puntero=c;
+			puntero++;
+			cont2++;
+			//putchar(c);
 		}
-		if(lock==1 && c=='\n'){
-			lock2=1;
-		}
+
 	}// cierre while
-	*pk='\0';
-	return pk;
+	*puntero='\0';
+	puntero=puntero-(cont2);
+	//printf("%s\n",pk );
+	return puntero;
 }
 
 char *GetPrivate(char *name){
 	FILE *f;
-	char *pri;
-	int lock=0, i=0, c=0, lock2=0;
+	char *pri=(char *) malloc(2048);
+	int lock=0, i=0, c=0, lock2=0, cont=0;
 	f=fopen(name,"r");
 	while ((c = getc(f)) != EOF){
 		if(c=='!'){
@@ -204,14 +223,94 @@ char *GetPrivate(char *name){
 			i++;
 		}
 		if(i==2 && lock==1){
+			//putchar('w');
 			*pri=c;
-			*pri++;
+			pri++;
+			cont++;
 		}
 		if(i==2 && c=='\n'){
 			lock=1;
 		}
+		//putchar(c);
 	}// cierre while
 	*pri='\0';
+	pri=pri-(cont);
 	return pri;
+
+}
+
+char *GetIDC(char *nom){// obtiene el id del certificado
+	FILE *f;
+	char *idc=(char *) malloc(2048);
+	int lock=0, i=0, c=0, lock2=0, cont=0,cont2=0;
+	f=fopen(nom,"r");
+	while ((c = getc(f)) != EOF){
+		if(lock==1 && c=='\n'){
+			break;
+		}
+
+		if(lock==1){
+			cont++;
+			//putchar('W');
+		}
+		if(c=='@'){
+			lock=1;
+
+		}
+
+		if(cont>=16){
+			*idc=c;
+			idc++;
+			cont2++;
+			//putchar(c);
+		}
+
+	}// cierre while
+	*idc='\0';
+	idc=idc-(cont2);
+	return idc;
+
+}
+
+char *GetIDU(char *nombre){// obtiene el id de usuario en el text signed
+	FILE *f;
+	char *idu=(char *) malloc(2048);
+	int  c=0, cont=0,cont2=0,cont3=0;
+	f=fopen(nombre,"r");
+	while ((c = getc(f)) != EOF){
+		if(c=='\n' && cont>7){
+			break;
+		}
+
+		if(c=='\n'){
+			cont++;
+		}
+		if(cont==7){
+			cont2++;
+		}
+
+		if(cont==7 && cont2>=14){
+			*idu=c;
+			idu++;
+			cont3++;
+			//putchar(c);
+		}
+
+	}// cierre while
+	*idu='\0';
+	idu=idu-(cont3);
+	return idu;
+
+
+}
+
+int ComprobarCertificado(char *Texto){// retorna 1 si el certificado en signed es valido
+	char *nom=GetIDU(Texto);
+	char *idc=GetIDC(nom);
+	char *idt=GetIDC(Texto);
+	if(*idc==*idt){
+		return 1;
+	}
+	else{return 0;}
 
 }
