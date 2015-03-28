@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-s
+
 
 int pin_size(long num){
   int size = 0;
@@ -13,7 +13,7 @@ int pin_size(long num){
 }
 
 
-char *request_info_user(){
+int request_info_user(){
 
   char info[6][50];
 
@@ -22,7 +22,8 @@ char *request_info_user(){
   scanf ("%s",first_name);
 
   strcpy(info[0], first_name);
-
+ //printf("%s",info[0]);
+/*
   char last_name[20];
   printf("Apellido: ");
   scanf ("%s",last_name);
@@ -42,10 +43,10 @@ char *request_info_user(){
     printf("El pin debe ser de 5 dígitos, por favor ingreselo nuevamente: \n");
     scanf("%d",&pin);
   }
-  /*convierte un int de base 10 una cadena de chars*/
+  convierte un int de base 10 una cadena de chars
   itoa(pin, info[3], 10);
 
-/*
+
   int select_key_size;
   char slct = (char)select_key_size;
   printf ("Seleccione el tamaño de la llave: \n");
@@ -69,7 +70,8 @@ char *request_info_user(){
   */
 }
 
-
+/*
 int main(){
   request_info_user();
 }
+*/
