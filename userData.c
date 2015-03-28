@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include "userData.h"
 
 int pin_size(long num){
   int size = 0;
@@ -13,42 +10,31 @@ int pin_size(long num){
 }
 
 
-int request_info_user(){
+int *request_info_user(){
 
-  char info[6][50];
-
+  printf("__________________________________________________________ \n");
+  printf("Ingrese los datos que se le solicitan\n\n");
   char first_name[20];
   printf("Nombre: ");
   scanf ("%s",first_name);
 
-  strcpy(info[0], first_name);
- //printf("%s",info[0]);
-/*
   char last_name[20];
   printf("Apellido: ");
   scanf ("%s",last_name);
-  strcpy(info[1], last_name);
-
 
   int id_user;
-  char id = (char)id_user;
   printf("Numero de identificación: ");
   scanf ("%d",&id_user);
 
   int pin;
-
   printf("PIN: ");
   scanf("%d",&pin);
   while (pin_size(pin) != 5){
     printf("El pin debe ser de 5 dígitos, por favor ingreselo nuevamente: \n");
     scanf("%d",&pin);
   }
-  convierte un int de base 10 una cadena de chars
-  itoa(pin, info[3], 10);
-
 
   int select_key_size;
-  char slct = (char)select_key_size;
   printf ("Seleccione el tamaño de la llave: \n");
   printf ("         1- 1024\n");
   printf ("         2- 2048\n");
@@ -62,16 +48,10 @@ int request_info_user(){
   }
 
   switch(select_key_size){
-		case 1:printf("Aun no hace nada\n");
-		case 2:printf("Aun no hace nada\n");
-  return 0;
+		case 1:
+      printf("Aun no hace nada\n");
+		case 2:
+      printf("Aun no hace nada\n");
   }
-  strcpy(info[4], slct);
-  */
+  return 0;
 }
-
-/*
-int main(){
-  request_info_user();
-}
-*/

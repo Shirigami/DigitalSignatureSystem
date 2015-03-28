@@ -1,3 +1,4 @@
+#include "userData.h"
 #include "Hash.h"
 #include "RSAencription.h"
 
@@ -11,7 +12,7 @@ int main(int argc, char const *argv[]){
   printf("2- Revocar Cerficado\n");
   printf("3- Consultar Certificados\n");
   printf("4- Firma documento\n");
-  printf("5- Validar documento\n");
+  printf("5- Validar documento\n\n");
 
   int option;
   scanf("%d",&option);
@@ -23,7 +24,7 @@ int main(int argc, char const *argv[]){
   }
 	 switch(option)
 	  {
-		case 1:printf("OPICION1\n");
+		case 1:request_info_user();
 			break;
 		case 2:printf("OPICION2\n");
 			break;
@@ -69,13 +70,13 @@ int main(int argc, char const *argv[]){
 	free(msgDecrypted);
 	free(keyPair);
 	free(publicKey);
-	free(privateKey);
+	free(privateKey);*/
 
 	// char nomArchivo[] = "profe";
 	// int cantidad = readCh(nomArchivo);
 	// char *ptrArchivo = readFile(cantidad,nomArchivo);
 	// printf("%s\n",summary(ptrArchivo));
 	// free(ptrArchivo);
-*/
+
 	return 0;
 }
