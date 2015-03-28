@@ -12,7 +12,6 @@ int main(int argc, char const *argv[])
 	char *msgEncryp = (char*)malloc(2048);
 	char *msgDecrypted = (char*)malloc(2048);
 	char msg[] = {"hola"};
-	//char msg2[] = {"ffcd442253517b2d58f76e369b5c0481516215bf"};
 	int msg_len = strlen(msg);
 
 	int publicEncrypt;

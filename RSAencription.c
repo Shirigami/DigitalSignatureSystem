@@ -1,21 +1,29 @@
 #include "RSAencription.h"
 
-// Recodar liberar free(pem_key)
+/* Generacion de las llaves publica y privada
+Los bits puede ser 1024 o 2048 segun que tan segura quiere la llave
+Para obtener las llaves char *privateKey, *publicKey; y enviar la referencia &
+Para obtener la llave par 	RSA *keyPair; y enviar la referencia &
+*/
+
 void RSA_keys(int bits, char **priKey, char **pubKey, RSA **keyPair){
-//https://shanetully.com/2012/04/simple-public-key-encryption-with-rsa-and-openssl/
+
   const int numExp = 3; // Exponente
 
-  *keyPair = RSA_generate_key(bits, numExp, NULL, NULL);
+  *keyPair = RSA_generate_key(bits, numExp, NULL, NULL); // Creacion de la llave par
 
   BIO *private = BIO_new(BIO_s_mem());
   BIO *public = BIO_new(BIO_s_mem());
 
+  //Generacion de las llaves publicas y privadas segun la llave par
   PEM_write_bio_RSAPrivateKey(private, *keyPair, NULL, NULL, 0, NULL, NULL);
   PEM_write_bio_RSAPublicKey(public, *keyPair);
 
+  // Tamano de las llaves
   size_t privateLeng = BIO_pending(private);
   size_t publicLeng = BIO_pending(public);
 
+  // Se le asigna memoria a las variables
   *priKey = malloc(privateLeng + 1);
   *pubKey = malloc(publicLeng + 1);
 
@@ -27,34 +35,30 @@ void RSA_keys(int bits, char **priKey, char **pubKey, RSA **keyPair){
 
 }
 
-RSA *createRSA(unsigned char *key,int public){
-  RSA *rsa = NULL;
-  BIO *keybio;
-  keybio = BIO_new_mem_buf(key,-1);
-  printf("entre");
-  if(keybio == NULL){
-    printf("Failed to create keyBIO");
-  }
-  if(public){
-    rsa = PEM_read_bio_RSA_PUBKEY(keybio,&rsa,NULL,NULL);
-
-  }
-  else{
-    rsa = PEM_read_bio_RSAPrivateKey(keybio,&rsa,NULL,NULL);
-
-  }
-  return rsa;
-}
-
+/* Encripta un char con la llave publica
+Recibe como parametro el dato, se debe asignar un arreglo de char -- char msg[] = {"hola"};
+Tamano del mensaje, --- int msg_len = strlen(msg);
+La llave publica y una variable que almacene el dato encriptado -- char *msgEncryp = (char*)malloc(2048);
+Estructura rsa, osea la llave par
+*/
+// Retorna un numero negativo si no logra encriptar el mensaje
 int public_encrypt(unsigned char *dato, int dato_len,
           unsigned char *publicKey, unsigned char *encrypted,RSA *rsa){
 
-  int padding = RSA_PKCS1_PADDING;
-
+  int padding = RSA_PKCS1_PADDING; // padding
+  //Modifica la variable encrypted y retorna un -1 sino retorna
+  // la cantidad de caracteres del dato
   int result = RSA_public_encrypt(dato_len,dato,encrypted,rsa,padding);
 
   return result;
 }
+/* Desencripta un char con la llave privada
+Recibe el dato  -- char *msgEncryp = (char*)malloc(2048);
+el tamano del dato, que es lo que retorna la funcion public_encrypt
+la llave privada y una variable para almacenar el mensaje desencriptado
+char *msgDecrypted = (char*)malloc(2048);
+ademas de una estructura rsa (llave par)
+*/
 
 int private_decrypt(unsigned char *enc_dato, int data_len,
     unsigned char *privateKey, unsigned char *decrypted,RSA *rsa){
@@ -64,15 +68,4 @@ int private_decrypt(unsigned char *enc_dato, int data_len,
   int result = RSA_private_decrypt(data_len,enc_dato,decrypted,rsa,padding);
 
   return result;
-}
-
-char *RSA_decrypt(char *encrypt,RSA *keypair,int *encrypt_len){
-
-  char *decrypt = malloc(RSA_size(keypair));
-  RSA_private_decrypt(*encrypt_len, (unsigned char*)encrypt, (unsigned char*)decrypt,
-                       keypair, RSA_PKCS1_OAEP_PADDING);
-   printf("Decrypted message: %s\n", decrypt);
-
-   return decrypt;
-
 }
