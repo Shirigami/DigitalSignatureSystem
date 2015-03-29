@@ -26,6 +26,7 @@ void AlmacenarDatos(Usuario user){// crea el txt cn la informacion del usuario
 	FILE *f;
 	int e = strlen(user.id) + 4;
 	char temp[e];
+	RegistrarUsuario(user.id);
 	strcpy(temp,user.id);
 	strcat(temp,".txt");
 
@@ -42,7 +43,7 @@ void AlmacenarDatos(Usuario user){// crea el txt cn la informacion del usuario
 	fputs("\n-Largo de llave:\n",f);
 	fputs(user.largo,f);
 	fputs("\n",f);
-	fputs("\n@ID_certificado: 1\n",f);
+	fputs("\n@ID_certificado:1\n",f);
 	fputs("$Public Key\n",f);
 	fputs(user.pkey,f);
 	fputs("\n*Private Key\n",f);
@@ -95,45 +96,65 @@ void RevocarCertificado(char *doc, char *puk, char*prk){// introduce las nuevas 
 
 
 
-		  while ((c = getc(f)) != EOF){// copia el user en el pivot
+	while ((c = getc(f)) != EOF){// copia el user en el pivot
 		  		fputc(c,d);
-		  }
-		  fclose(f);
-		  fclose(d);
-		  f = fopen(doc,"r+");
-		  d = fopen(doc,"r");
-		  c = 0;
-		   while ((c = getc(d)) != EOF){// rellena cn llaves nuevas
-		   	if(c=='@'){
-		   		fputs("\n@ID_Certificado:\n",f);
-		   		fputs("$Public Key\n",f);
-		   		fputs(puk,f);
-		   		fputc('\n',f);
-		   		fputs("*Private Key\n",f);
-		   		fputs(prk,f);
-		   		fputs("\n!Llaves revocadas:\n",f);
-		// //
-		   	}
-		  		fputc(c,f);
+	}
 
+	fclose(f);
+	int numero;
+	char *idCertificado = GetIDC(doc);
+	numero = atoi(idCertificado);
+	numero = numero + 1;
+	sprintf(idCertificado,"%d",numero);
+	remove(f);
+	fclose(d);
+		//
+	f = fopen(doc,"w");
+	d = fopen(pivot,"r");
+	c = 0;
+	int boolean = 0;;
+
+	while ((c = getc(d)) != EOF){// rellena cn llaves nuevas
+		if(boolean == 0){
+			if(c == '@'){
+				boolean = 1;
+			  fputs("@ID_Certificado:",f);
+				fputs(idCertificado,f);
+				fputs("\n",f);
+			  fputs("$Public Key\n",f);
+			  fputs(puk,f);
+			  fputc('\n',f);
+			  fputs("*Private Key\n",f);
+			  fputs(prk,f);
+			  fputs("\n!Llaves revocadas:\n",f);
+			  }
 		}
-		fclose(f);
-		fclose(d);
-		remove(pivot);
+	fputc(c,f);
+	}
+
+	fclose(f);
+	fclose(d);
+	remove(pivot);
 
 
 
 }
 
-void FirmarDoc(char *doc, char *firma, char *id){//crea el doc firmado
+void FirmarDoc(char *doc, char *firma, char *id, char *fecha){//crea el doc firmado
 	FILE *f, *d;
 	int c=0;
+	d=fopen(doc,"r");
+	char *nombre = strcat(doc,"_signed");
 	//char *extension="_signed";
 	//strcat(doc,extension);
 	//printf("%s\n",doc );
-	char *nombre="archivo_firmado.txt";
+
+	// arreglar el fichero con el txt
+	// "nombre_signed.txt"
+
+	//char *nombre="archivo_firmado.txt";
 	f=fopen(nombre,"a");
-	d=fopen(doc,"r");
+
 	fputs("Texto original:\n",f);
 	while ((c = getc(d)) != EOF){
 		fputc(c,f);
@@ -142,6 +163,9 @@ void FirmarDoc(char *doc, char *firma, char *id){//crea el doc firmado
 	fputs("!Firma Digital:\n",f);
 	fputs(firma,f);
 	fputc('\n',f);
+	fputs("Fecha:\n",f);
+	fputs(fecha,f);
+	ObtenerCertificado(id,nombre);
 	fclose(f);
 	//strcat(id,".txt");
 
@@ -151,7 +175,7 @@ void FirmarDoc(char *doc, char *firma, char *id){//crea el doc firmado
 
 char *GetPin(char *doc){// obtiene el pin del usuario
 	FILE *f;
-	char *pin;
+	char *pin = (char *) malloc(2048);
 	int cont=0, i=0, c=0, cont2=0;
 	f=fopen(doc,"r");
 	while ((c = getc(f)) != EOF){
@@ -306,12 +330,104 @@ char *GetIDU(char *nombre){// obtiene el id de usuario en el text signed
 }
 
 int ComprobarCertificado(char *Texto){// retorna 1 si el certificado en signed es valido
-	char *nom=GetIDU(Texto);
-	char *idc=GetIDC(nom);
-	char *idt=GetIDC(Texto);
-	if(*idc==*idt){
+	char *nom = GetIDU(Texto);
+	char *idc = GetIDC(nom);
+	char *idt = GetIDC(Texto);
+	if(*idc == *idt){
 		return 1;
 	}
-	else{return 0;}
+	return 0;
+}
 
+// sacar firma digital
+
+char *Getlargo(char *name){// retorna el largo d la llave
+	FILE *f;
+	char *puntero=(char *) malloc(2048);
+	int lock=0, i=0, c=0, lock2=0, cont=0, cont2=0,cont3=0;
+	f=fopen(name,"r");
+	while ((c = getc(f)) != EOF){
+		if(c=='\n' && cont3>=4){
+			break;
+		}
+		if(c=='\n'){
+			cont3++;
+		}
+
+		if(c=='-'){
+			cont++;
+
+		}
+
+		if(cont=3){
+			i++;
+		}
+
+		if(cont3==4 && c!='\n'){
+			*puntero=c;
+			puntero++;
+			cont2++;
+			//putchar(c);
+		}
+
+	}// cierre while
+	*puntero='\0';
+	puntero=puntero-(cont2);
+	//printf("%s\n",pk );
+	return puntero;
+
+}
+
+
+void ImprimirC(char *usu){// imprime certificado:todo menos pin y private key
+	FILE *f;
+	f=fopen(usu,"r");
+	int i=0,c=0;
+	int lock=1;
+	while ((c = getc(f)) != EOF){
+		if(c=='!'){
+				lock=1;
+			}
+
+			if(c == '\n' && i <= 1){
+				lock=1;
+			}
+			if(c =='*'){
+				i++;
+				//printf("\n");
+				lock=0;
+			}
+			if(lock==1){
+				putchar(c);
+			}
+
+		}//cierre while
+		printf("\n-------------------------------------\n");
+
+}
+
+
+void RegistrarUsuario(char *usu){// almacena todos los id de los usuarios
+	FILE *f;
+	f=fopen("Lista_Usuarios.txt","a");
+	fputs(usu,f);
+	fputc('\n',f);
+
+}
+void Desplegar(){// despliega todos los usuarios del sistema
+	FILE *f;
+	int c=0;
+	f=fopen("Lista_Usuarios.txt","r");
+	printf("Usuarios Disponibles en el sistema:\n");
+	while ((c = getc(f)) != EOF){
+		putchar(c);
+
+	}
+	char usuario[30];
+	printf("\nIngrese el nombre del usuario que desea consultar:\n");
+	scanf("%s",&usuario);
+	//printf("%s",usuario);
+	strcat(usuario,".txt");
+	//printf("%s",usuario);
+	ImprimirC(usuario);
 }

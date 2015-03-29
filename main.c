@@ -16,6 +16,7 @@ int main(int argc, char const *argv[]){
 
 	int option;
   scanf("%d",&option);
+
   while (option != 1 && option != 2 && option != 3 &&
     option != 4 && option != 5){
       printf("Opcion inválida \n");
@@ -29,7 +30,7 @@ int main(int argc, char const *argv[]){
 			break;
 		case 2:revoked_certificate();
 			break;
-		case 3:printf("OPICION3\n");
+		case 3:request_certificate();
 			break;
 		case 4:signing_document();
 			break;
@@ -71,12 +72,11 @@ int main(int argc, char const *argv[]){
 	free(keyPair);
 	free(publicKey);
 	free(privateKey);*/
+	//
+	// char nomArchivo[max];
+	// scanf("%128[^\n]",nomArchivo);
+	// int cantidad =
 
-	// char nomArchivo[] = "profe";
-	// int cantidad = readCh(nomArchivo);
-	// char *ptrArchivo = readFile(cantidad,nomArchivo);
-	// printf("%s\n",summary(ptrArchivo));
-	// free(ptrArchivo);
 
 	return 0;
 }

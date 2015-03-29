@@ -1,6 +1,9 @@
 #include "userData.h"
 #include "Almacenar.h"
 #include "RSAencription.h"
+#include "cifradoCesar.h"
+#include "Hash.h"
+#include "date.h"
 
 
 
@@ -35,7 +38,6 @@ int request_info_user(){
   char pin[20];
   printf("PIN:\n");
   scanf("%s",&pin);
-  //aprintf("%s",pin);
 
   while (strlen(&pin) != 5){ /*Verificacion  del largo del pin*/
     printf("El pin debe ser de 5 dígitos, por favor ingreselo nuevamente: \n");
@@ -48,8 +50,8 @@ int request_info_user(){
   printf ("         1- 1024\n");
   printf ("         2- 2048\n");
   scanf ("%d",&select_key_size);
-  //printf("estoyaqui");
-  //printf("%d",select_key_size);
+
+
   while (select_key_size != 1 && select_key_size != 2){/*Verificacion de la opcion seleccionada*/
       printf("Opcion inválida \n");
       printf("Seleccione nuevamente el tamaño de la llave\n");
@@ -67,8 +69,12 @@ int request_info_user(){
   }
 
   char *privateKey, *publicKey;
+
   RSA_keys(select_key_size, &privateKey, &publicKey);
 	char size[5];
+
+  char *encriptado;
+  encriptado = cifrado(publicKey,atoi(pin));
 
 	sprintf(size,"%d",select_key_size);
 
@@ -77,11 +83,12 @@ int request_info_user(){
   cliente.nombre = first_name;
   cliente.pin = pin;
   cliente.largo = size;
-  cliente.pkey = publicKey;
-  cliente.prkey = privateKey;
-
+  cliente.pkey = privateKey;
+  cliente.prkey = encriptado;
 
   AlmacenarDatos(cliente);
+
+
   return 0;
 }
 
@@ -93,19 +100,27 @@ int revoked_certificate(){
   char id_user[200];
   printf("Numero de identificación: ");
   scanf ("%s",&id_user);
+
   strcat(id_user,".txt");
-  //printf("%s",id_user);
+
   FILE* archivo = fopen(id_user, "r");
   if (archivo) {
     fclose(archivo);
+
     char *privateKey, *publicKey;
-    //int bits;
-    RSA_keys(1024,&publicKey,&privateKey);
-    RevocarCertificado(id_user,privateKey,publicKey);
+    char *bits = Getlargo(id_user);
+
+    RSA_keys(atoi(bits),&privateKey,&publicKey);
+
+
+    char *encriptado;
+    encriptado = cifrado(publicKey,atoi(GetPin(id_user)));
+
+    RevocarCertificado(id_user,privateKey,encriptado);
   }
   else {
       printf("\nEl usuario no existe\n");
-      return 0;
+      return main();
   }
 return 0;
 }
@@ -115,31 +130,108 @@ int signing_document(){
   printf("______________________________________________________________________ \n");
   printf("FIRMAR DOCUMENTO\n\n");
 
+  char* fecha = date();
+
   /*Solicitud de la ruta del documento que se desea firmar*/
-  char *document_path;
+  char document_path[MAX];
   printf("Indique la ruta del documento que desea firmar: \n");
   scanf ("%s",document_path);
 
-  /*Solicitud del numero de identificacion*/
-  int id_user;
-  printf("Numero de identificación: ");
-  scanf ("%d",&id_user);
+  FILE* archivo = fopen(document_path, "r");
 
-  /*Solicitud del pin del usuario*/
-  int pin;
-  printf("PIN: ");
-  scanf("%d",&pin);
+  if(archivo){
+    fclose(archivo);
+    /*Solicitud del numero de identificacion*/
+    char id_user[30];
+    printf("Numero de identificación: ");
+    scanf ("%s",&id_user);
+    strcat(id_user,".txt");
+    //printf("%s",id_user);
+    FILE* archivoUser = fopen(id_user, "r");
+
+    if(archivoUser){
+
+      char pin[30];
+      printf("PIN: ");
+      scanf("%s",&pin);
+      //printf("%s",id_user);
+      char *pinDoc;
+      pinDoc = GetPin(id_user);
+      // printf("%s",&pin);
+      // printf("%s",pinDoc);
+      ///home/kenneth/Desktop/ejemplo.txt
+
+      if(!strcmp(pinDoc,pin)){
+      //
+        int cantidad = readCh(document_path);
+        char *ptrArchivo = readFile(cantidad,document_path);
+        char *hash = (char*)malloc(2048);
+        hash = summary(ptrArchivo);
+        //printf("%s",hash);
+
+        char *keyPrivate = GetPrivate(id_user);
+        //
+
+
+        // Public key
+        char *desencriptado = descifrado(keyPrivate,atoi(pin));
+
+
+        //
+        char *hashEncrypted = (char*)malloc(2048);
+        //
+
+
+        public_encrypt((unsigned char*)hash, 40,
+                    (unsigned char*)desencriptado,(unsigned char*)hashEncrypted);
+        //firmardoc
+
+
+       }
+      else{
+
+        printf("\nEl pin es incorrecto\n");
+        fclose(archivo);
+        return main();
+      }
+
+    }
+    else{
+      printf("\nEl usuario no existe\n");
+      fclose(archivo);
+      return main();
+    }
+
+  }
+    /*Solicitud del pin del usuario*/
+  else{
+    printf("\nEl path no existe\n");
+    fclose(archivo);
+    //getchar();
+    return main();
+  }
+
+  // agarro documento ---- hash ----- getPrivate (id) (desencripto con Pin)---- encriptp hash ---
+  // firma digital --- firmarDoc(char *path, char *firmaDigital, char *id))
+
+  fclose(archivo);
   return 0;
+
+
 }
 
 
 int validate_document(){
-  printf("______________________________________________________________________ \n");
-  printf("FIRMAR DOCUMENTO\n\n");
 
   /*Solicitud de la ruta del documento que se desea verificar*/
   char *document_path;
   printf("Indique la ruta del documento que desea firmar: \n");
   scanf("%s", document_path);
   return 0;
+}
+
+int request_certificate(){
+  Desplegar();
+  return 0;
+
 }

@@ -10,5 +10,6 @@ int request_info_user();
 int revoked_certificate();
 int signing_document();
 int validate_document();
+int request_certificate();
 
 #endif

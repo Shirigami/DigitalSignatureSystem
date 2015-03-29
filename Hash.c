@@ -33,7 +33,7 @@ char *summary(char string[]){
 
 /*Funcion readCh retorna la cantidad de caracteres que contiene el documento, la cantidad será
 utilizada para la creacion de la lista dinámica*/
-int readCh(char nameFile[]) {
+int readCh(char *nameFile) {
 	FILE *file = NULL; /* puntero donde se guardara la direccion del archivo*/
 	int count = 0;
 	file = fopen (nameFile, "r"); /* abre y  lee el archivo*/

@@ -4,6 +4,27 @@
 Los bits puede ser 1024 o 2048 segun que tan segura quiere la llave
 Para obtener las llaves char *privateKey, *publicKey; y enviar la referencia &
 */
+RSA *createRSA(unsigned char * key,int public)
+{
+    RSA *rsa= NULL;
+    BIO *keybio ;
+    keybio = BIO_new_mem_buf(key, -1);
+    if (keybio==NULL)
+    {
+        printf( "Failed to create key BIO");
+        return 0;
+    }
+    if(public)
+    {
+        rsa = PEM_read_bio_RSA_PUBKEY(keybio, &rsa,NULL, NULL);
+    }
+    else
+    {
+        rsa = PEM_read_bio_RSAPrivateKey(keybio, &rsa,NULL, NULL);
+    }
+
+    return rsa;
+}
 
 void RSA_keys(int bits, char **priKey, char **pubKey){
 
@@ -42,13 +63,19 @@ Estructura rsa, osea la llave par
 */
 // Retorna un numero negativo si no logra encriptar el mensaje
 int public_encrypt(unsigned char *dato, int dato_len,
-          unsigned char *publicKey, unsigned char *encrypted,RSA *rsa){
+          unsigned char *publicKey, unsigned char *encrypted){
+  printf("%s",dato);
+  printf("%d",dato_len);
+  printf("%s",publicKey);
+  //printf("%s",encrypted);
 
   int padding = RSA_PKCS1_PADDING; // padding
   //Modifica la variable encrypted y retorna un -1 sino retorna
   // la cantidad de caracteres del dato
-  int result = RSA_public_encrypt(dato_len,dato,encrypted,rsa,padding);
+  RSA *rsa = createRSA(publicKey,1);
 
+  int result = RSA_public_encrypt(40,"dato",&encrypted,rsa,padding);
+  printf("%s",result);
   return result;
 }
 /* Desencripta un char con la llave privada
@@ -60,9 +87,11 @@ ademas de una estructura rsa (llave par)
 */
 
 int private_decrypt(unsigned char *enc_dato, int data_len,
-    unsigned char *privateKey, unsigned char *decrypted,RSA *rsa){
+    unsigned char *privateKey, unsigned char *decrypted){
 
   int padding = RSA_PKCS1_PADDING;
+
+  RSA * rsa = createRSA(privateKey,0);
 
   int result = RSA_private_decrypt(data_len,enc_dato,decrypted,rsa,padding);
 
