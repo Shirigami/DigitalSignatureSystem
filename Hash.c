@@ -79,3 +79,18 @@ int compareHash(char hash1[], char hash2[]){
 	if(ret != 0){ret = 1;}
 	return ret;
 }
+
+/*
+ASI DEBERÍA ESTAR EN EL MAIN
+int main(int argc, char const *argv[])
+{
+
+	char nomArchivo[MAX];
+	scanf("%128[^\n]",nomArchivo);
+	int cantidad = readCh(nomArchivo);
+	char *ptrArchivo = readFile(cantidad,nomArchivo);
+	printf("%s\n",summary(ptrArchivo));
+	free(ptrArchivo);
+	return 0;
+}
+*/
