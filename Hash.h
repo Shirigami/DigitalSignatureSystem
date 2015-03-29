@@ -1,10 +1,13 @@
 #ifndef Hash_h
 #define Hash_h
 
+#define MAX 128
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <gcrypt.h>
+
 
 char *summary(char string[]);
 
