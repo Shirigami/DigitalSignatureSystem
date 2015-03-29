@@ -6,4 +6,5 @@
 
 char *date();
 
+
 #endif
