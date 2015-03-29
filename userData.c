@@ -85,7 +85,6 @@ int request_info_user(){
   cliente.largo = size;
   cliente.pkey = privateKey;
   cliente.prkey = encriptado;
-
   AlmacenarDatos(cliente);
 
 
@@ -109,7 +108,7 @@ int revoked_certificate(){
 
     char *privateKey, *publicKey;
     char *bits = Getlargo(id_user);
-
+    char *keyPair;
     RSA_keys(atoi(bits),&privateKey,&publicKey);
 
 
@@ -165,25 +164,26 @@ int signing_document(){
       //
         int cantidad = readCh(document_path);
         char *ptrArchivo = readFile(cantidad,document_path);
-        char *hash = (char*)malloc(2048);
-        hash = summary(ptrArchivo);
-        //printf("%s",hash);
+        char *hash = summary(ptrArchivo);
+        printf("%s",hash);
 
         char *keyPrivate = GetPrivate(id_user);
+        // //
         //
-
-
-        // Public key
-        char *desencriptado = descifrado(keyPrivate,atoi(pin));
-
-
+        // // Public key
+        //RECORDAR PONER DOBLE PUNTERO!!!
+        char *desencriptado = {"hola amigos mios"};
+        // //= descifrado(keyPrivate,atoi(pin));
         //
-        char *hashEncrypted = (char*)malloc(2048);
         //
-
-
-        public_encrypt((unsigned char*)hash, 40,
-                    (unsigned char*)desencriptado,(unsigned char*)hashEncrypted);
+        // //
+        // char *hashEncrypted = (char*)malloc(2048);
+        // //
+        //
+        // public_encrypt((unsigned char*)hash, 40,
+        //             (unsigned char*)desencriptado,(unsigned char*)hashEncrypted);
+        //
+        // printf("%s",hashEncrypted);
         //firmardoc
 
 

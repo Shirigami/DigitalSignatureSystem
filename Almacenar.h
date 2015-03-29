@@ -11,6 +11,8 @@ typedef struct _Usuario{
   char *largo;
   char *pkey;
   char *prkey;
+  char *keyPair;
+
 } Usuario;
 void AlmacenarDatos(Usuario user);
 void ObtenerCertificado(char *doc, char *docf);

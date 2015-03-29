@@ -12,7 +12,7 @@
 #include <openssl/err.h>
 #include <string.h>
 
-RSA *createRSA(unsigned char * key,int public);
+RSA *createRSA(unsigned char *key,int public);
 // Generacion de llaves
 void RSA_keys(int bits, char **priKey, char **pubKey);
 
