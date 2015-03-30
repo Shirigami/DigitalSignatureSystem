@@ -165,40 +165,30 @@ int signing_document(){
         int cantidad = readCh(document_path);
         char *ptrArchivo = readFile(cantidad,document_path);
         char *hash = summary(ptrArchivo);
-        printf("%s",hash);
-
+        //printf("%s",hash);
         char *keyPrivate = GetPrivate(id_user);
-        // //
-        //
-        // // Public key
-        //RECORDAR PONER DOBLE PUNTERO!!!
-        char *desencriptado = {"hola amigos mios"};
-        // //= descifrado(keyPrivate,atoi(pin));
-        //
-        //
-        // //
-        // char *hashEncrypted = (char*)malloc(2048);
-        // //
-        //
-        // public_encrypt((unsigned char*)hash, 40,
-        //             (unsigned char*)desencriptado,(unsigned char*)hashEncrypted);
-        //
-        // printf("%s",hashEncrypted);
-        //firmardoc
+        char *key = descifrado(keyPrivate,atoi(pin));
+        char *hashEncrypted = (char*)malloc(2048);
+        int msg_len = strlen(hash);
+        int numero;
+        numero = public_encrypt((unsigned char*)hash, msg_len,(unsigned char*)key,(unsigned char*)hashEncrypted);
+        //FirmarDoc(document_path, hashEncrypted, id_user,fecha);
+        // int bits = 1024;
+        // RSA_keys2(bits);
 
 
        }
       else{
 
         printf("\nEl pin es incorrecto\n");
-        fclose(archivo);
+        //fclose(archivo);
         return main();
       }
 
     }
     else{
       printf("\nEl usuario no existe\n");
-      fclose(archivo);
+      //fclose(archivo);
       return main();
     }
 

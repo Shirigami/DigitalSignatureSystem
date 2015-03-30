@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdio.h>
 
-int date();
+char *date();
+
 
 #endif
