@@ -187,8 +187,8 @@ int signing_document(){
         //printf("%s",(char*)rsa);
 
         numero = public_encrypt((unsigned char*)hash, msg_len,hashEncrypted,key);
-        printf("%d",numero);
-        printf("%s",hashEncrypted);
+        //printf("%d",numero);
+        //printf("%s",hashEncrypted);
         //printf("%s",fecha);
         char * firmaDigital;
 
@@ -276,7 +276,7 @@ int validate_document(){
     //desencripcion con llave privada
     //hash
     // printf("%s\n",firmaDesencriptada);
-    // printf("%s\n",hash);
+     printf("%s\n",hash);
     private_decrypt((unsigned char*)firmaDesencriptada,strlen(firmaDesencriptada),publicKey,decrypted);
 
     printf("%s\n",decrypted);
