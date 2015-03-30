@@ -3,6 +3,13 @@
 #include <stdio.h>//  Realizado por: Wayner Valverde
 #include <string.h>
 #include <stdlib.h>
+#include <openssl/ssl.h>
+#include <openssl/rsa.h>
+#include <openssl/pem.h>
+#include <openssl/err.h>
+#include <openssl/evp.h>
+#include <openssl/bio.h>
+#include <openssl/err.h>
 
 typedef struct _Usuario{
   char *id;
@@ -28,5 +35,11 @@ char *Getlargo(char *name);
 void ImprimirC(char *usu);
 void RegistrarUsuario(char *usu);
 void Desplegar();
+char *LeerLlavePublica();
+char *LeerLlavePrivada();
+char *GetFirma(char *nombre);
+char *ObtenerTexto(char *nombre);
+// void llavePublic(RSA *keyPair,char *id_user);
+// RSA *readPublicRSA(char *id_user);
 
 #endif

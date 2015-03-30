@@ -1,6 +1,7 @@
 /*Falta manejar los strings con el .txt, asignar un numero de certificado, encriptar llave privada*/
 #include "Almacenar.h"
 
+
 // int main (){
 //
 // 	Usuario cliente={"2014.txt","Way","120", "1024","llavePublica","llavePrivada"};
@@ -144,7 +145,7 @@ void FirmarDoc(char *doc, char *firma, char *id, char *fecha){//crea el doc firm
 	FILE *f, *d;
 	int c=0;
 	d=fopen(doc,"r");
-	char *nombre = strcat(doc,"_signed");
+	char *nombre = strcat(doc,"_signed.txt");
 	//char *extension="_signed";
 	//strcat(doc,extension);
 	//printf("%s\n",doc );
@@ -163,10 +164,11 @@ void FirmarDoc(char *doc, char *firma, char *id, char *fecha){//crea el doc firm
 	fputs("!Firma Digital:\n",f);
 	fputs(firma,f);
 	fputc('\n',f);
-	fputs("Fecha:\n",f);
+	fputs("*Fecha:\n",f);
 	fputs(fecha,f);
-	ObtenerCertificado(id,nombre);
 	fclose(f);
+	ObtenerCertificado(id,nombre);
+
 	//strcat(id,".txt");
 
 }
@@ -303,18 +305,18 @@ char *GetIDU(char *nombre){// obtiene el id de usuario en el text signed
 	int  c=0, cont=0,cont2=0,cont3=0;
 	f=fopen(nombre,"r");
 	while ((c = getc(f)) != EOF){
-		if(c=='\n' && cont>7){
+		if(c=='\n' && cont==1){
 			break;
 		}
 
-		if(c=='\n'){
-			cont++;
+		if(c=='-'){
+			cont=1;
 		}
-		if(cont==7){
+		if(cont==1){
 			cont2++;
 		}
 
-		if(cont==7 && cont2>=14){
+		if(cont==1 && cont2>12){
 			*idu=c;
 			idu++;
 			cont3++;
@@ -331,6 +333,7 @@ char *GetIDU(char *nombre){// obtiene el id de usuario en el text signed
 
 int ComprobarCertificado(char *Texto){// retorna 1 si el certificado en signed es valido
 	char *nom = GetIDU(Texto);
+	strcat(nom,".txt");
 	char *idc = GetIDC(nom);
 	char *idt = GetIDC(Texto);
 	if(*idc == *idt){
@@ -430,4 +433,116 @@ void Desplegar(){// despliega todos los usuarios del sistema
 	strcat(usuario,".txt");
 	//printf("%s",usuario);
 	ImprimirC(usuario);
+}
+
+char *LeerLlavePublica(){//copia todo el contenido de un txt en este caso las llaves
+		FILE *f;
+		char *nombre = "public.pem";
+		int cont=0, c=0;
+	f=fopen(nombre,"r");
+	char *puntero=(char *) malloc(2048);
+	while ((c = getc(f)) != EOF){
+			*puntero=c;
+			puntero++;
+			cont++;
+
+			//putchar(c);
+		}//cierre while
+		*puntero='\0';
+		puntero=puntero-(cont);
+		remove(nombre);
+		return puntero;
+
+}
+char *ObtenerOriginalTxt(char *nombre){
+	FILE *f;
+
+	int cont=0, c=0;
+	f=fopen(nombre,"r");
+	char *puntero=(char *) malloc(2048);
+	while ((c = getc(f)) != EOF){
+			*puntero=c;
+			puntero++;
+			cont++;
+
+		//putchar(c);
+	}//cierre while
+	*puntero='\0';
+	puntero=puntero-(cont);
+	remove(nombre);
+	return puntero;
+}
+
+char *ObtenerTexto(char *nombre){
+	FILE *f;
+
+	int cont = 0, c = 0, cont2 = 0;
+	f = fopen(nombre,"r");
+
+	char *puntero = (char *) malloc(2048);
+	while ((c = getc(f)) != EOF){
+		if(c=='!'){
+			break;
+		}
+		if(cont2 >= 1){
+			*puntero = c;
+			puntero ++;
+			cont ++;
+		}
+		if(c == '\n'){
+			cont2 ++;
+		}
+
+	}
+	puntero --;
+	*puntero = '\0';
+	puntero = puntero - (cont - 1);
+	return puntero;
+}
+char *LeerLlavePrivada(){//copia todo el contenido de un txt en este caso las llaves
+		FILE *f;
+		char *nombre = "private.pem";
+		int cont=0, c=0;
+	f=fopen(nombre,"r");
+	char *puntero=(char *) malloc(2048);
+	while ((c = getc(f)) != EOF){
+			*puntero=c;
+			puntero++;
+			cont++;
+
+			//putchar(c);
+		}//cierre while
+		*puntero='\0';
+		puntero=puntero-(cont);
+		remove(nombre);
+		return puntero;
+
+}
+
+char *GetFirma(char *nombre){
+	FILE *f;
+		int cont=0, c=0,lock=0, cont2 = 0;
+	f=fopen(nombre,"r");
+	char *puntero=(char *) malloc(2048);
+	while ((c = getc(f)) != EOF){
+		if(c=='*'){
+			break;
+		}
+		if(c=='!'){
+			lock=1;
+		}
+		if(lock==1 && cont2 == 1){
+			*puntero=c;
+			puntero++;
+			cont++;
+		}
+		if(c =='\n' && lock == 1){
+			cont2 =1;
+		}
+
+	}//cierre while
+	puntero--;
+	*puntero='\0';
+	puntero=puntero-(cont-1);
+	return puntero;
 }

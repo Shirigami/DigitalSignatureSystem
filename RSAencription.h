@@ -12,17 +12,16 @@
 #include <openssl/err.h>
 #include <string.h>
 
-RSA *createRSA(const char* publicKey);
+RSA *createRSA(char* key,int public);
 // Generacion de llaves
-void RSA_keys(int bits, char **priKey, char **pubKey);
+void RSA_keys(int bits, char **priKey, char **pubKey, RSA **keyPair);
 
 // Encriptando con public key
-int public_encrypt(unsigned char *dato, int dato_len,
-          unsigned char *publicKey, unsigned char *encryted);
+int public_encrypt(unsigned char *dato, int dato_len, unsigned char *encrypted,char *publicKey);
 
 // Desencriptando con private key
 int private_decrypt(unsigned char *enc_dato, int data_len,
-          unsigned char *key, unsigned char *decrypted);
+           char *key, unsigned char *decrypted);
 
 void RSA_keys2(int bits);
 #endif

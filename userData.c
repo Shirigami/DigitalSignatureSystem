@@ -70,7 +70,12 @@ int request_info_user(){
 
   char *privateKey, *publicKey;
 
-  RSA_keys(select_key_size, &privateKey, &publicKey);
+
+  RSA_keys2(select_key_size);
+  privateKey = LeerLlavePrivada();
+  publicKey = LeerLlavePublica();
+
+
 	char size[5];
 
   char *encriptado;
@@ -86,6 +91,7 @@ int request_info_user(){
   cliente.pkey = privateKey;
   cliente.prkey = encriptado;
   AlmacenarDatos(cliente);
+
 
 
   return 0;
@@ -108,8 +114,10 @@ int revoked_certificate(){
 
     char *privateKey, *publicKey;
     char *bits = Getlargo(id_user);
-    char *keyPair;
-    RSA_keys(atoi(bits),&privateKey,&publicKey);
+
+    RSA_keys2(atoi(bits));
+    privateKey = LeerLlavePrivada();
+    publicKey = LeerLlavePublica();
 
 
     char *encriptado;
@@ -129,7 +137,7 @@ int signing_document(){
   printf("______________________________________________________________________ \n");
   printf("FIRMAR DOCUMENTO\n\n");
 
-  char* fecha = date();
+  char *fecha = date();
 
   /*Solicitud de la ruta del documento que se desea firmar*/
   char document_path[MAX];
@@ -153,26 +161,41 @@ int signing_document(){
       char pin[30];
       printf("PIN: ");
       scanf("%s",&pin);
-      //printf("%s",id_user);
+
       char *pinDoc;
       pinDoc = GetPin(id_user);
-      // printf("%s",&pin);
-      // printf("%s",pinDoc);
-      ///home/kenneth/Desktop/ejemplo.txt
+
+      ///home/kenneth/Desktop/hola3.txt
 
       if(!strcmp(pinDoc,pin)){
       //
         int cantidad = readCh(document_path);
         char *ptrArchivo = readFile(cantidad,document_path);
         char *hash = summary(ptrArchivo);
+
         //printf("%s",hash);
         char *keyPrivate = GetPrivate(id_user);
+
         char *key = descifrado(keyPrivate,atoi(pin));
-        char *hashEncrypted = (char*)malloc(2048);
+
+
+        unsigned char *hashEncrypted = (unsigned char*)malloc(2048);
         int msg_len = strlen(hash);
         int numero;
-        numero = public_encrypt((unsigned char*)hash, msg_len,(unsigned char*)key,(unsigned char*)hashEncrypted);
-        //FirmarDoc(document_path, hashEncrypted, id_user,fecha);
+
+        //rsa = readPublicRSA(id_user);
+        //printf("%s",(char*)rsa);
+
+        numero = public_encrypt((unsigned char*)hash, msg_len,hashEncrypted,key);
+        printf("%d",numero);
+        printf("%s",hashEncrypted);
+        //printf("%s",fecha);
+        char * firmaDigital;
+
+        Base64Encode(hashEncrypted,&firmaDigital);
+        //printf("%s",firmaDigital);
+
+        FirmarDoc(document_path, firmaDigital, id_user,fecha);
         // int bits = 1024;
         // RSA_keys2(bits);
 
@@ -214,9 +237,69 @@ int signing_document(){
 int validate_document(){
 
   /*Solicitud de la ruta del documento que se desea verificar*/
-  char *document_path;
-  printf("Indique la ruta del documento que desea firmar: \n");
-  scanf("%s", document_path);
+  char document_path[MAX];
+  printf("Indique la ruta del documento firmado: \n");
+  scanf("%s",document_path);
+  //printf("%s",document_path);
+  int estado;
+  estado = ComprobarCertificado(document_path);
+  //printf("%d",estado);
+
+
+
+
+    // Obtener texto original del document_path
+
+
+  if(estado == 0){
+    printf("Certificado del documento no es valido");
+  }
+  else{
+    char *OriginalTxt = ObtenerTexto(document_path);
+    //printf("%s\n",OriginalTxt);
+    // Obtener texto original del document_path
+    //printf("%s",OriginalTxt);
+    char* hash = summary(OriginalTxt);
+
+    char *publicKey = GetPublic(document_path);
+    //printf("%s",publicKey);
+
+    char *firma = GetFirma(document_path);
+    //printf("%s\n",firma);
+    char* firmaDesencriptada;
+    Base64Decode(firma,&firmaDesencriptada);
+    //printf("%s\n",firmaDesencriptada);
+    //printf("%s",publicKey);
+    unsigned char *decrypted = (unsigned char*)malloc(2048);
+
+    //base first
+    //desencripcion con llave privada
+    //hash
+    // printf("%s\n",firmaDesencriptada);
+    // printf("%s\n",hash);
+    private_decrypt((unsigned char*)firmaDesencriptada,strlen(firmaDesencriptada),publicKey,decrypted);
+
+    printf("%s\n",decrypted);
+    //Desencripta la firma con llave publica /home/kenneth/Desktop/hola.txt_signed.txt
+    //char *resumen;
+
+    if(hash == decrypted){
+      printf("La firma es valida\n");
+
+    }
+    else{
+      printf("La firma es invalida\n");
+    }
+    free(decrypted);
+  }
+
+
+
+
+
+
+
+
   return 0;
 }
 
