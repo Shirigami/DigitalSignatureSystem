@@ -4,7 +4,7 @@
 
 // int main (){
 //
-// 	Usuario cliente={"2014.txt","Way","120", "1024","llavePublica","llavePrivada"};
+// 	/Usuario cliente={"2014.txt","Way","120", "1024","llavePublica","llavePrivada"};
 // 	AlmacenarDatos(cliente);
 // 	char *palabra="2014.txt";
 // 	char *palabra2="student.txt";
@@ -107,7 +107,7 @@ void RevocarCertificado(char *doc, char *puk, char*prk){// introduce las nuevas 
 	numero = atoi(idCertificado);
 	numero = numero + 1;
 	sprintf(idCertificado,"%d",numero);
-	remove(f);
+	remove(doc);
 	fclose(d);
 		//
 	f = fopen(doc,"w");
@@ -160,7 +160,7 @@ void FirmarDoc(char *doc, char *firma, char *id, char *fecha){//crea el doc firm
 	while ((c = getc(d)) != EOF){
 		fputc(c,f);
 	}
-	fputc('\n',f);
+
 	fputs("!Firma Digital:\n",f);
 	fputs(firma,f);
 	fputc('\n',f);
@@ -210,7 +210,7 @@ char *GetPin(char *doc){// obtiene el pin del usuario
 char *GetPublic(char *name){// obtiene la llave publica del documento firmado
 	FILE *f;
 	char *puntero=(char *) malloc(2048);
-	int lock=0, i=0, c=0, lock2=0, cont=0, cont2=0;
+	int lock=0, c=0, cont=0, cont2=0;
 	f=fopen(name,"r");
 	while ((c = getc(f)) != EOF){
 
@@ -240,7 +240,7 @@ char *GetPublic(char *name){// obtiene la llave publica del documento firmado
 char *GetPrivate(char *name){
 	FILE *f;
 	char *pri=(char *) malloc(2048);
-	int lock=0, i=0, c=0, lock2=0, cont=0;
+	int lock=0, i=0, c=0, cont=0;
 	f=fopen(name,"r");
 	while ((c = getc(f)) != EOF){
 		if(c=='!'){
@@ -269,7 +269,7 @@ char *GetPrivate(char *name){
 char *GetIDC(char *nom){// obtiene el id del certificado
 	FILE *f;
 	char *idc=(char *) malloc(2048);
-	int lock=0, i=0, c=0, lock2=0, cont=0,cont2=0;
+	int lock=0, c=0, cont=0,cont2=0;
 	f=fopen(nom,"r");
 	while ((c = getc(f)) != EOF){
 		if(lock==1 && c=='\n'){
@@ -347,7 +347,7 @@ int ComprobarCertificado(char *Texto){// retorna 1 si el certificado en signed e
 char *Getlargo(char *name){// retorna el largo d la llave
 	FILE *f;
 	char *puntero=(char *) malloc(2048);
-	int lock=0, i=0, c=0, lock2=0, cont=0, cont2=0,cont3=0;
+	int  i=0, c=0, cont=0, cont2=0,cont3=0;
 	f=fopen(name,"r");
 	while ((c = getc(f)) != EOF){
 		if(c=='\n' && cont3>=4){
@@ -362,7 +362,7 @@ char *Getlargo(char *name){// retorna el largo d la llave
 
 		}
 
-		if(cont=3){
+		if(cont==3){
 			i++;
 		}
 
@@ -428,7 +428,7 @@ void Desplegar(){// despliega todos los usuarios del sistema
 	}
 	char usuario[30];
 	printf("\nIngrese el nombre del usuario que desea consultar:\n");
-	scanf("%s",&usuario);
+	scanf("%s",usuario);
 	//printf("%s",usuario);
 	strcat(usuario,".txt");
 	//printf("%s",usuario);
@@ -448,6 +448,7 @@ char *LeerLlavePublica(){//copia todo el contenido de un txt en este caso las ll
 
 			//putchar(c);
 		}//cierre while
+
 		*puntero='\0';
 		puntero=puntero-(cont);
 		remove(nombre);

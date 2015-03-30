@@ -26,22 +26,22 @@ int request_info_user(){
   /*Solicitud del nombre del usuario*/
   char first_name[200];
   printf("Nombre: ");
-  scanf ("%s",&first_name);
+  scanf ("%s",first_name);
 
   /*Solicitud del numero de identificacion del usuario*/
   char id_user[20];
   printf("Numero de identificación: ");
-  scanf ("%s",&id_user);
+  scanf ("%s",id_user);
 
 
   /*Solicitud del pin del usuario*/
   char pin[20];
   printf("PIN:\n");
-  scanf("%s",&pin);
+  scanf("%s",pin);
 
-  while (strlen(&pin) != 5){ /*Verificacion  del largo del pin*/
+  while (strlen(pin) != 5){ /*Verificacion  del largo del pin*/
     printf("El pin debe ser de 5 dígitos, por favor ingreselo nuevamente: \n");
-    scanf("%s",&pin);
+    scanf("%s",pin);
   }
 
   /*Solicitud del tamaño de las llaves públicas y privadas*/
@@ -104,7 +104,7 @@ int revoked_certificate(){
   /*Solicitud del numero de identificacion*/
   char id_user[200];
   printf("Numero de identificación: ");
-  scanf ("%s",&id_user);
+  scanf ("%s",id_user);
 
   strcat(id_user,".txt");
 
@@ -151,7 +151,7 @@ int signing_document(){
     /*Solicitud del numero de identificacion*/
     char id_user[30];
     printf("Numero de identificación: ");
-    scanf ("%s",&id_user);
+    scanf ("%s",id_user);
     strcat(id_user,".txt");
     //printf("%s",id_user);
     FILE* archivoUser = fopen(id_user, "r");
@@ -160,7 +160,7 @@ int signing_document(){
 
       char pin[30];
       printf("PIN: ");
-      scanf("%s",&pin);
+      scanf("%s",pin);
 
       char *pinDoc;
       pinDoc = GetPin(id_user);
@@ -194,7 +194,7 @@ int signing_document(){
 
         Base64Encode(hashEncrypted,&firmaDigital);
         //printf("%s",firmaDigital);
-
+        printf("%s",fecha);
         FirmarDoc(document_path, firmaDigital, id_user,fecha);
         // int bits = 1024;
         // RSA_keys2(bits);
